@@ -4,6 +4,7 @@ import { LazyImage } from './components/LazyImage';
 import { Pagination } from './components/Pagination';
 import { Lightbox } from './components/Lightbox';
 import { PrivacyModal } from './components/PrivacyModal';
+import { SplashScreen } from './components/SplashScreen';
 import { Photo } from './types';
 
 // Constants
@@ -11,6 +12,7 @@ const ITEMS_PER_PAGE = 60;
 const TOTAL_ITEMS = 300; // Mock total database size
 
 const App: React.FC = () => {
+  const [showSplash, setShowSplash] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
@@ -42,8 +44,10 @@ const App: React.FC = () => {
     };
 
     generatePhotos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage]);
+    if (!showSplash) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentPage, showSplash]);
 
   // Handle Scroll for Header Styling
   useEffect(() => {
@@ -59,12 +63,15 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col relative">
       
+      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+
       {/* Vertical Sidebars (The Motto) */}
       <VerticalSidebar text="自强不息" position="left" />
       <VerticalSidebar text="止于至善" position="right" />
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-28 lg:px-32 py-8 transition-all duration-300">
+      {/* Increased max-width to accomodate 5 columns while keeping image size roughly similar */}
+      <main className={`flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-20 lg:px-24 py-8 transition-opacity duration-1000 ${showSplash ? 'opacity-0' : 'opacity-100'}`}>
         
         {/* Header / Logo */}
         <header className={`flex flex-col items-center justify-center mb-16 transition-all duration-500 ${isScrolled ? 'scale-90 opacity-90' : 'scale-100'}`}>
@@ -72,13 +79,14 @@ const App: React.FC = () => {
             XDFZ IMAGE
           </h1>
           <div className="h-1 w-24 bg-stone-900 rounded-full my-4"></div>
-          <p className="font-smiley text-xl md:text-2xl text-stone-400 mt-2 tracking-wide opacity-80">
+          <p className="font-smiley text-xl md:text-2xl text-stone-400/80 mt-2 tracking-wide">
             做一个幸福的平凡人
           </p>
         </header>
 
         {/* Masonry Grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
+        {/* Updated: xl:columns-5 for 5 columns on larger screens */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-5 gap-4 space-y-4">
           {photos.map((photo) => (
             <div key={photo.id} className="break-inside-avoid">
               <LazyImage 

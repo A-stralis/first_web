@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>XDFZ IMAGE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
       @font-face {
         font-family: 'Smiley Sans';
@@ -21,14 +21,20 @@
               serif: ['"Noto Serif SC"', 'SimSun', 'STSong', 'serif'],
               sans: ['Inter', 'sans-serif'],
               smiley: ['"Smiley Sans"', 'sans-serif'],
+              handwriting: ['"Dancing Script"', 'cursive'],
             },
             animation: {
               'fade-in': 'fadeIn 0.5s ease-out',
+              'write': 'write 2.5s ease-out forwards',
             },
             keyframes: {
               fadeIn: {
                 '0%': { opacity: '0', transform: 'translateY(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              write: {
+                '0%': { width: '0' },
+                '100%': { width: '100%' },
               }
             }
           },
