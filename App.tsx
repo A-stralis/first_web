@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Camera } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { VerticalSidebar } from './components/VerticalSidebar';
 import { LazyImage } from './components/LazyImage';
 import { Pagination } from './components/Pagination';
 import { Lightbox } from './components/Lightbox';
+import { PrivacyModal } from './components/PrivacyModal';
 import { Photo } from './types';
 
 // Constants
@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   // Generate Mock Data based on page
@@ -67,21 +68,16 @@ const App: React.FC = () => {
         
         {/* Header / Logo */}
         <header className={`flex flex-col items-center justify-center mb-16 transition-all duration-500 ${isScrolled ? 'scale-90 opacity-90' : 'scale-100'}`}>
-          <div className="w-16 h-16 bg-black text-white flex items-center justify-center rounded-full mb-6 shadow-lg">
-            <Camera size={32} />
-          </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-stone-900 mb-2 font-sans">
             XDFZ IMAGE
           </h1>
           <div className="h-1 w-24 bg-stone-900 rounded-full my-4"></div>
-          <p className="text-stone-500 font-serif italic text-lg">
-            Capturing Moments, Eternalizing Memories
+          <p className="font-smiley text-xl md:text-2xl text-stone-400 mt-2 tracking-wide opacity-80">
+            做一个幸福的平凡人
           </p>
         </header>
 
         {/* Masonry Grid */}
-        {/* We use CSS columns for true masonry layout. 
-            'break-inside-avoid' on the child prevents images from being split across columns. */}
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
           {photos.map((photo) => (
             <div key={photo.id} className="break-inside-avoid">
@@ -103,8 +99,14 @@ const App: React.FC = () => {
         />
         
         {/* Footer */}
-        <footer className="text-center py-8 text-stone-400 text-sm font-serif">
-          &copy; {new Date().getFullYear()} XDFZ PHOTOGRAPHY CLUB. ALL RIGHTS RESERVED.
+        <footer className="flex flex-col items-center justify-center py-8 text-stone-400 text-sm font-serif space-y-2">
+          <span>&copy; {new Date().getFullYear()} XDFZ PHOTOGRAPHY CLUB. ALL RIGHTS RESERVED.</span>
+          <button 
+            onClick={() => setIsPrivacyOpen(true)}
+            className="hover:text-stone-600 underline underline-offset-4 transition-colors text-xs"
+          >
+            隐私政策
+          </button>
         </footer>
 
       </main>
@@ -113,6 +115,12 @@ const App: React.FC = () => {
       <Lightbox 
         photo={selectedPhoto} 
         onClose={() => setSelectedPhoto(null)} 
+      />
+      
+      {/* Privacy Policy Modal */}
+      <PrivacyModal
+        isOpen={isPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
       />
 
     </div>
